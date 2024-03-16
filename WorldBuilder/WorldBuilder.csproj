@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <OutputType>Library</OutputType>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <OutputPath>..\bin\</OutputPath>
+    <PlatformTarget>x86</PlatformTarget>
+    <Version>1.0.0</Version>
+    <LangVersion>12</LangVersion>
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+    <ProjectGuid>1f53a100-fe98-4481-ad78-c193424b2e56</ProjectGuid>
+    <RootNamespace>WorldBuilder</RootNamespace>
+    <AssemblyName>WorldBuilder</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="deps\**" />
+    <EmbeddedResource Remove="deps\**" />
+    <None Remove="deps\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PluginCore.cs" />
+    <None Include="PluginUI.cs" />
+    <Content Include="README.md" />
+    <Content Include="scripts\installer.nsi" />
+    <Content Include="scripts\post-build.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Decal.Adapter">
+      <HintPath>.\..\deps\Decal.Adapter.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Decal.Interop.Core">
+      <HintPath>..\deps\Decal.Interop.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Decal.Interop.D3DService">
+      <HintPath>..\deps\Decal.Interop.D3DService.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.DirectX">
+      <HintPath>..\deps\Microsoft.DirectX.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.DirectX.Direct3D">
+      <HintPath>..\deps\Microsoft.DirectX.Direct3D.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.DirectX.Direct3DX">
+      <HintPath>..\deps\Microsoft.DirectX.Direct3DX.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualC" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NSIS-Tool" Version="3.0.9">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="UtilityBelt.Service" Version="2.2.12-acclient-methods0001">
+      <ExcludeAssets>runtime; build;</ExcludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Tools\" />
+  </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="powershell -ExecutionPolicy RemoteSigned -NoProfile &quot;$(ProjectDir)scripts\post-build.ps1&quot; -NuGetPackageRoot &quot;$(NuGetPackageRoot)&quot; -ProjectDir &quot;$(ProjectDir)&quot;" />
+  </Target>
+</Project>
